@@ -1,10 +1,10 @@
-TARGET=2023_SBEC_CaioGeraldes.pdf
+TARGET=./fala/2023_SBEC_CaioGeraldes.pdf
 FALA=./fala
 
 all: tex
 
 tex: $(TARGET)
-	cp $(FALA)/main.pdf ./$(TARGET)
+	cp $(FALA)/main.pdf $(TARGET)
 
 $(TARGET): $(FALA)/main.tex
 	{ \
