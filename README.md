@@ -29,3 +29,4 @@ make diorisis
 ### Ambiente `python`
 
 Dependências:
+ - Python
