@@ -1,0 +1,66 @@
+\documentclass[a4paper,article,12pt,oneside]{memoir}
+
+\usepackage{csquotes}
+\usepackage[english,german,french,main=brazil]{babel}
+\usepackage{fontspec}
+\setmainfont{Brill}
+\setmonofont[Scale=0.8]{Noto Sans Mono}
+\usepackage{hyperref}
+\usepackage[table,x11names]{xcolor}
+\usepackage{linguex}
+\usepackage{paralist}
+
+\title{Ser necessário fazer e ordenar fazer:\\{\Large{} classificadores gêneros literários por meio de classes verbais do grego}}
+\author{Caio B. A. Geraldes\thanks{Este projeto foi financiado pela FAPESP por meio dos processos de número \texttt{2017/23334-2}, \texttt{2019/18473-9} e \texttt{2021/06027-4}. Este \emph{paper} resulta do trabalho final da disciplina \texttt{FLL5133} \emph{Linguística Computacional}. Agradeço a Marcos Lopes (USP), Martina Rodda (\foreignlanguage{english}{Univerisity of Oxford}) e Richard McElreath (\foreignlanguage{german}{Max-Planck-Institut für evolutionäre Anthropologie}) pelas discussões sobre os métodos e a interpretação dos dados. Quaisquer falhas são, naturalmente, da minha parte. Todos os dados e o código utilizado neste trabalho estão disponíveis em~\url{https://github.com/caiogeraldes/2023sbec}.}\\{\normalsize(FFLCH-USP)\\\url{caio.geraldes@usp.br}}}
+
+
+\renewcommand{\figureautorefname}{Figura}
+\renewcommand{\tableautorefname}{Tabela}
+\renewcommand{\sectionautorefname}{seção}
+
+\definecolor{green}{RGB}{16,89,66} % rgb(16,89,66)
+\definecolor{orange}{RGB}{217,95,2} % rgb(217,95,2)
+
+\hypersetup{colorlinks=true, linkcolor=green, citecolor=green, filecolor=magenta, urlcolor=green, bookmarksdepth=4}
+
+\usepackage[backend=biber,
+            style=abnt,
+            pretty,
+            repeatfields,
+            noslsn,
+            natbib,
+            extrayear,
+            ]{biblatex}
+\addbibresource{biblio.bib}
+
+
+\begin{document}
+
+\maketitle%
+
+\begin{abstract}
+ Neste trabalho, utilizo métodos de processamento de linguagem natural e quantitativos para produzir evidência formal para esta hipótese de distribuição de classes verbais entre gêneros literários. Utiliza-se o modelo Naïve-Bayes de classificador para verificar se a seleção lexical de verbos é suficientemente diferente entre os gêneros historiográfico e filosófico e são extraídos os coeficientes de peso dos verbos de interesse na classificação dos gêneros para observar se as classes verbais semânticas possuem efeito significativo na classificação. O resultado positivo permite considerar a associação entre autoria e gênero e atração de caso espúria e causada pela associação entre classe verbal e gênero literário.\\
+ \noindent \textbf{Palavras-chave:} 
+\end{abstract}
+
+\chapter{Introdução}
+
+Em trabalho anterior~\cite{Geraldes2020,Geraldes2021}, mostrei que a concordância de caso entre objeto indireto da matriz e predicado secundário de uma oração infinitiva em grego clássico (exemplificadas em~\ref{gloss:attrac}), estavam correlacionadas pelos seguintes fatores:
+\begin{inparaenum}[(a)]
+  \item distância entre controlador e alvo, quanto menor mais frequente;
+  \item classe de verbo infinitivo, sobretudo ocorrendo com cópulas;
+  \item classe do verbo matriz, sobretudo ocorrendo com verbos com sentido modal\slash{}deôntico;
+  \item autor, sendo mais frequente em Platão do que em Xenofonte e praticamente inexistente em Heródoto.
+\end{inparaenum}
+
+% TODO: colocar no alfabeto
+\ex.\label{gloss:attrac}\ag.\label{elthonta}symbọːléw-ẹː \uwave{tɔ̂ːj Ksenopʰɔ̂ːnti} \uline{eltʰónt-ɑ} {ẹːs delpʰọːs} ɑnɑkojnoɔ̂ːs-ɑj {tɔ̂ːj tʰeɔ̂ːj} {peri tɛ̂ːs porẹ́ːɑs}\\
+aconselha-\textsc{3sg} X.\textsc{dat.sg.m} indo-\textsc{acc.sg.m} para-Delfos interrogar.\textsc{inf} o-deus.\textsc{dat.sg} sobre-a-viagem\\
+Ele aconselha Xenofonte ir a Delfos interrogar o deus sobre a viagem. (Xen. Anab. 3.1.5)
+\bg.\label{elthonti}ɑpʰɛ̂ːk-e \uwave{moj} \uline{eltʰónt-i} {pros hymɑ̂s} légẹːn tɑlɛːtʰɛ̂ː\\
+permitiu-\textsc{3sg} \textsc{pron{(1sg.dat.sg)}} indo-\textsc{dat.sg.m} frente-a-vós dizer.\textsc{inf} a-verdade-\textsc{acc.pl.n}\\
+Ele me permitiu ir frente a vós [e\slash{}para] dizer a verdade.  (Xen. Hell. 6.1.13)\footnote{Os exemplos utilizados foram retirados das edições disponibilizadas no TLG~\cite{tlg}. A transliteração foi realizada automaticamente utilizando o pacote \texttt{cltk}~\cite{cltk}, seguindo a reconstrução fonológica apresentada em~\textcite{Probert2010}.}
+
+\section{}
+
+\end{document}
