@@ -8,3 +8,24 @@ Para gerar as figuras, dados e pdf, executar:
 make
 ```
 
+Para limpar os arquivos de compilação do `LaTeX`, executar:
+
+```bash
+make clean
+```
+
+## Reproduzindo os resultados
+
+### Dados Diorisis
+
+Baixe o corpus Diorisis do [repositório dos autores](https://figshare.com/articles/dataset/The_Diorisis_Ancient_Greek_Corpus_JSON_/12251468), copie para `./dados/diorisis/` e exclua os textos que não interessam ao modelo.
+
+Se houver acesso ao comando `wget`, utilizar:
+
+```bash
+make diorisis
+```
+
+### Ambiente `python`
+
+Dependências:
