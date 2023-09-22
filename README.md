@@ -1,6 +1,13 @@
 # SBEC 2023: Ser necessário fazer e ordenar fazer: classificadores gêneros literários por meio de classes verbais do grego
 
-*Autor*: Caio B. A. Geraldes [<caio.geraldes@usp.br>](mailto:caio.geraldes@usp.br)
+**Autor**: Caio B. A. Geraldes [<caio.geraldes@usp.br>](mailto:caio.geraldes@usp.br)
+
+<!--toc:start-->
+- [SBEC 2023: Ser necessário fazer e ordenar fazer: classificadores gêneros literários por meio de classes verbais do grego](#sbec-2023-ser-necessário-fazer-e-ordenar-fazer-classificadores-gêneros-literários-por-meio-de-classes-verbais-do-grego)
+  - [Reproduzindo os resultados](#reproduzindo-os-resultados)
+    - [Dados Diorisis](#dados-diorisis)
+    - [Ambiente `python`](#ambiente-python)
+<!--toc:end-->
 
 Para gerar as figuras, dados e pdf, executar:
 
