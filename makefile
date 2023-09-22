@@ -7,7 +7,17 @@ BIBLIO=$(FALA)/bibliografia/biblio.bib
 all: $(TARGET)
 
 $(TARGET): $(PRETARGET)
-	cp $(FALA)/main.pdf $(TARGET)
+	{\
+		cp $(PRETARGET) $(TARGET);\
+		rm -f $(PRETARGET) \
+				$(FALA)/main.aux\
+				$(FALA)/main.bbl\
+				$(FALA)/main.bcf\
+				$(FALA)/main.blg\
+				$(FALA)/main.log\
+				$(FALA)/main.out\
+				$(FALA)/main.run.xml;\
+	}
 
 $(PRETARGET): $(FALA)/main.tex $(BIBLIO)
 	{ \
@@ -73,13 +83,6 @@ diorisis: $(DIORISIS)
 	}
 
 clean:
-	rm -f $(FALA)/main.aux\
-		$(FALA)/main.bbl\
-		$(FALA)/main.bcf\
-		$(FALA)/main.blg\
-		$(FALA)/main.log\
-		$(FALA)/main.out\
-		$(FALA)/main.pdf\
-		$(FALA)/main.run.xml\
-		$(DIORISIS)
+	rm -f $(DIORISIS)\
+	  $(TARGET)
 	
