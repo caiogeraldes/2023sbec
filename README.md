@@ -1,6 +1,9 @@
-# SBEC 2023: Ser necessário fazer e ordenar fazer: classificadores gêneros literários por meio de classes verbais do grego
+# SBEC 2023
 
-**Autor**: Caio B. A. Geraldes [<caio.geraldes@usp.br>](mailto:caio.geraldes@usp.br)
+**Título:** Ser necessário fazer e ordenar fazer: classificadores gêneros
+literários por meio de classes verbais do grego
+
+**Autor:** Caio B. A. Geraldes [<caio.geraldes@usp.br>](mailto:caio.geraldes@usp.br)
 
 ## Reproduzindo os resultados
 
@@ -31,7 +34,10 @@ Para gerar as figuras, dados e pdf, executar:
 make
 ```
 
-Para limpar os arquivos de compilação do `LaTeX`, executar:
+### Limpando o ambiente
+
+Se por algum motivo for necessário limpar o ambiente (arquivos de
+compilação do `LaTeX`, figuras, e dados) rodar:
 
 ```bash
 make clean
