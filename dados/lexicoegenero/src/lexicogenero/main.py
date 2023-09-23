@@ -5,16 +5,11 @@ import seaborn as sns
 from typing import Any, Dict
 from dotenv import load_dotenv
 from sklearn.pipeline import Pipeline
-from sklearn.naive_bayes import ComplementNB, MultinomialNB, BernoulliNB
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.model_selection import train_test_split, cross_validate
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
-    precision_score,
-    accuracy_score,
-    recall_score,
-    f1_score,
     confusion_matrix,
-    make_scorer,
     classification_report,
     log_loss,
 )
@@ -40,6 +35,8 @@ logging.basicConfig(
 load_dotenv()
 DIORISIS_PATH = os.getenv("DIORISIS_PATH")
 assert DIORISIS_PATH is not None, "Path para DIORISIS não especificada"
+FIGURAS_PATH = os.getenv("FIGURAS_PATH")
+assert FIGURAS_PATH is not None, "Path para FIGURAS não especificada"
 
 if __name__ == "__main__":
     plt.rcParams["figure.figsize"] = [20, 5]
@@ -136,179 +133,7 @@ if __name__ == "__main__":
 
     df_tokens_par = gera_paragrafo(df_tokens.loc[df_tokens.POS != "punct"])
 
-    print("Validando modelos")
-    logging.info("Validando modelos")
-    x_dsv, y_dsv = df_verbos_sent.lemma, df_verbos_sent.genero
-    x_dst, y_dst = df_sents.lemmata, df_sents.genero
-    x_dpt, y_dpt = df_tokens_par.lemma, df_tokens_par.genero
     x_dpv, y_dpv = df_verbos_par.lemma, df_verbos_par.genero
-    x_dss, y_dss = df_subst_sent.lemma, df_subst_sent.genero
-    x_dps, y_dps = df_subst_par.lemma, df_subst_par.genero
-
-    modelos = {
-        "doc-sent-verbo": (x_dsv, y_dsv),
-        "doc-sent-subst": (x_dss, y_dss),
-        "doc-sent-token": (x_dst, y_dst),
-        "doc-par-verbo": (x_dpv, y_dpv),
-        "doc-par-subst": (x_dps, y_dps),
-        "doc-par-token": (x_dpt, y_dpt),
-    }
-
-    resultados = []
-
-    cv = 10
-    for modelo, (x, y) in modelos.items():
-        pipe = Pipeline(
-            steps=[
-                (
-                    "vectorizer",
-                    TfidfVectorizer(ngram_range=(1, 1), stop_words=STOPS_LIST),
-                ),
-                ("bayes", MultinomialNB()),
-            ]
-        )
-        print(f"Modelo: MultinomialNB - {modelo}")
-        logging.info(f"Modelo: MultinomialNB - {modelo}")
-        x_treino, x_teste, y_treino, y_teste = train_test_split(
-            x, y, test_size=0.20, shuffle=True
-        )
-        pipe.fit(x_treino, y_treino)
-        y_pred = pipe.predict(x_teste)
-
-        scores = cross_validate(
-            pipe,
-            x_treino,
-            y_treino,
-            cv=cv,
-            scoring={
-                "precisão_filo": make_scorer(precision_score, pos_label="filo"),
-                "cobertura_filo": make_scorer(recall_score, pos_label="filo"),
-                "f1_filo": make_scorer(f1_score, pos_label="filo"),
-                "acurácia": make_scorer(accuracy_score),
-            },
-            return_train_score=False,
-        )
-        scores["classe"] = [modelo for _ in range(cv)]
-        scores["nb"] = ["MultinomialNB" for _ in range(cv)]
-        resultados.append(scores)
-
-    for modelo, (x, y) in modelos.items():
-        pipe = Pipeline(
-            steps=[
-                (
-                    "vectorizer",
-                    TfidfVectorizer(
-                        ngram_range=(1, 1), stop_words=STOPS_LIST, binary=True
-                    ),
-                ),
-                ("bayes", BernoulliNB()),
-            ]
-        )
-        print(f"Modelo: Bernoulli - {modelo}")
-        logging.info(f"Modelo: Bernoulli - {modelo}")
-        x_treino, x_teste, y_treino, y_teste = train_test_split(
-            x, y, test_size=0.20, shuffle=True
-        )
-        pipe.fit(x_treino, y_treino)
-        y_pred = pipe.predict(x_teste)
-
-        scores = cross_validate(
-            pipe,
-            x_treino,
-            y_treino,
-            cv=cv,
-            scoring={
-                "precisão_filo": make_scorer(precision_score, pos_label="filo"),
-                "cobertura_filo": make_scorer(recall_score, pos_label="filo"),
-                "f1_filo": make_scorer(f1_score, pos_label="filo"),
-                "acurácia": make_scorer(accuracy_score),
-            },
-            return_train_score=False,
-        )
-        scores["classe"] = [modelo for _ in range(cv)]
-        scores["nb"] = ["Bernoulli" for _ in range(cv)]
-        resultados.append(scores)
-
-    for modelo, (x, y) in modelos.items():
-        pipe = Pipeline(
-            steps=[
-                (
-                    "vectorizer",
-                    TfidfVectorizer(ngram_range=(1, 1), stop_words=STOPS_LIST),
-                ),
-                ("bayes", ComplementNB()),
-            ]
-        )
-        print(f"Modelo: Complement - {modelo}")
-        logging.info(f"Modelo: Complement - {modelo}")
-        x_treino, x_teste, y_treino, y_teste = train_test_split(
-            x, y, test_size=0.20, shuffle=True
-        )
-        pipe.fit(x_treino, y_treino)
-        y_pred = pipe.predict(x_teste)
-
-        scores = cross_validate(
-            pipe,
-            x_treino,
-            y_treino,
-            cv=cv,
-            scoring={
-                "precisão_filo": make_scorer(precision_score, pos_label="filo"),
-                "cobertura_filo": make_scorer(recall_score, pos_label="filo"),
-                "f1_filo": make_scorer(f1_score, pos_label="filo"),
-                "acurácia": make_scorer(accuracy_score),
-            },
-            return_train_score=False,
-        )
-        scores["classe"] = [modelo for _ in range(cv)]
-        scores["nb"] = ["ComplementNB" for _ in range(cv)]
-        resultados.append(scores)
-
-    df_res = pd.DataFrame(resultados)
-    df_res = df_res.explode(df_res.columns.to_list()).reset_index(drop=True)
-    df_res = df_res.melt(
-        ["classe", "nb"], var_name="métrica", value_name="vals")
-    df_res = df_res.loc[df_res.métrica != "fit_time"]
-    df_res = df_res.loc[df_res.métrica != "score_time"]
-    print("Salvando resultados em ./data/data_res.csv")
-    logging.info(
-        "Salvando resultados em ./data/data_res.csv"
-    )
-    df_res.to_csv(
-        "./data/data_res.csv", index=False)
-
-    print("Plotando resultados dos modelos")
-    logging.info("Plotando resultados dos modelos")
-    sns.set(font_scale=1)
-    plot = sns.displot(
-        data=df_res,
-        x="vals",
-        col="métrica",
-        row="classe",
-        hue="nb",
-        palette="Dark2",
-        kind="kde",
-    )
-    plot.set_titles(template="{col_name}")
-    plt.savefig(
-        "./figs/performance.geral.png",
-        bbox_inches="tight",
-    )
-
-    plot = sns.displot(
-        data=df_res.loc[df_res.nb == "MultinomialNB"],
-        x="vals",
-        col="métrica",
-        col_wrap=2,
-        hue="classe",
-        palette="Dark2",
-        kind="kde",
-    )
-    plot.set_titles(template="{col_name}")
-    plt.savefig(
-        "./figs/performance.mnb.png",
-        bbox_inches="tight",
-    )
 
     print("Treinando modelo de uso")
     logging.info("Treinando modelo de uso")
@@ -416,15 +241,17 @@ if __name__ == "__main__":
     cm = pd.DataFrame(confusion_matrix(y_pred=pipe.predict(x_teste), y_true=y_teste))
     cm.rename({0: "Filosofia", 1: "Historiografia"}, inplace=True)
     cm.rename({0: "Filosofia", 1: "Historiografia"}, axis=1, inplace=True)
+    print(cm)
     sns.heatmap(
         cm,
         annot=True,
+        fmt=""
     )
     plt.title("Matriz de confusão")
     plt.ylabel("Real")
     plt.xlabel("Previsão")
     plt.savefig(
-        "./figs/confusao.png",
+        os.path.join(FIGURAS_PATH, "confusao.png"),
         bbox_inches="tight",
     )
 
@@ -493,7 +320,7 @@ if __name__ == "__main__":
         bar.text(0, (i / 2) - 0.1, str(round(z, 2)), fontdict={"fontsize": 15})
     plt.title("Probabilidade em log de cada lemma")
     plt.savefig(
-        "./figs/logprobs.png",
+        os.path.join(FIGURAS_PATH, "logprobs.png"),
         bbox_inches="tight",
     )
 
@@ -522,37 +349,22 @@ if __name__ == "__main__":
     )
     chart.set_xticklabels(chart.get_xticklabels(), rotation=45, horizontalalignment='right')
     plt.savefig(
-        "./figs/diff.png", bbox_inches="tight"
+        os.path.join(FIGURAS_PATH, "diff.png"), bbox_inches="tight"
     )
 
     plt.figure(figsize=(20, 7))
     sns.set(font_scale=1.2)
 
-    diffs["modal"] = diffs["modal"].astype("str")
-
-    chart = sns.barplot(
-        data=diffs.sort_values("logprob"),
-        x="lemma",
-        y="logprob",
-        hue="modal",
-        dodge=False,
-        palette="viridis")
-    chart.set_xticklabels(chart.get_xticklabels(), rotation=45, horizontalalignment='right')
-
+    chart2 = sns.barplot(
+            data=diffs.sort_values("logprob"),
+            x="lemma",
+            y="logprob",
+            hue="modal",
+            dodge=False,
+            palette="viridis")
+    chart2.set_xticklabels(chart.get_xticklabels(), rotation=45, horizontalalignment='right')
     plt.savefig(
-        "./figs/diff2.png", bbox_inches="tight"
-    )
-
-    sns.barplot(
-        data=diffs.sort_values("logprob"),
-        y="lemma",
-        x="logprob",
-        hue="modal",
-        dodge=False,
-        palette="viridis",
-    )
-    plt.savefig(
-        "./figs/diff2.png", bbox_inches="tight"
+        os.path.join(FIGURAS_PATH, "diff2.png"), bbox_inches="tight"
     )
 
     print(
@@ -572,5 +384,5 @@ if __name__ == "__main__":
     plt.ylabel("Conta")
     plt.axvline(diffs.z.apply(abs).quantile(0.95), color="black")
     plt.savefig(
-        "./figs/diffz.png", bbox_inches="tight"
+        os.path.join(FIGURAS_PATH, "diffz.png"), bbox_inches="tight"
     )
