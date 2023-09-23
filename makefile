@@ -92,6 +92,14 @@ python:
 		poetry run pip install torch;\
 	}
 
+env:
+	{\
+		rm -f "$$(pwd)/dados/lexicogenero/.env";\
+		echo "DIORISIS_PATH=\"$$(pwd)/dados/diorisis/\"" >> "$$(pwd)/dados/lexicogenero/.env";\
+		echo "FIGURAS_PATH=\"$$(pwd)/falas/figs/\"" >> "$$(pwd)/dados/lexicogenero/.env";\
+		cat "$$(pwd)/dados/lexicogenero/.env";\
+	}
+
 clean:
 	rm -f $(TARGET)\
 	  $(FIGURA)\
