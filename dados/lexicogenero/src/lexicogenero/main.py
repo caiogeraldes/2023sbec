@@ -330,7 +330,9 @@ if __name__ == "__main__":
     diffs["z"] = (df_flp_filo.z - df_flp_hist.z).to_frame().reset_index().z
     diffs["modal"] = [
         bool(x)
-        for x in [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, ]
+        for x in [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
+                  0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1,
+                  1, 1, 0, 1]
     ]
     print(
         "Salvando resultados em ./data/data_diff.csv"
@@ -356,12 +358,12 @@ if __name__ == "__main__":
     sns.set(font_scale=1.2)
 
     chart2 = sns.barplot(
-            data=diffs.sort_values("logprob"),
-            x="lemma",
-            y="logprob",
-            hue="modal",
-            dodge=False,
-            palette="viridis")
+        data=diffs.sort_values("logprob"),
+        x="lemma",
+        y="logprob",
+        hue="modal",
+        dodge=False,
+        palette="viridis")
     chart2.set_xticklabels(chart.get_xticklabels(), rotation=45, horizontalalignment='right')
     plt.savefig(
         os.path.join(FIGURAS_PATH, "diff2.png"), bbox_inches="tight"

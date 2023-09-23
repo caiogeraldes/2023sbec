@@ -193,7 +193,7 @@ O corpus selecionado compreende os documentos supérstites de Heródoto, Xenofon
 
 O modelo utilizado para extrair os pesos do léxico verbal para classificar um determinado parágrafo como do gênero filosófico ou historiográfico foi treinado com 80\% do banco de dados e avaliado com os 20\% restantes.
 As métricas obtidas estão em~\autoref{tab:resumometrica} e a matriz de confusão em~\autoref{fig:confusao}.
-Em resumo, este modelo prevê corretamente o gênero textual de um parágrafo 80\% das vezes utilizando-se da entrada lexical apenas do verbos utilizados nos parágrafos.
+Em resumo, este modelo prevê corretamente o gênero textual de um parágrafo aproximadamente 80\% das vezes utilizando-se da entrada lexical apenas do verbos utilizados nos parágrafos.
 
 \begin{table}[!ht]
 	\centering
@@ -201,15 +201,12 @@ Em resumo, este modelo prevê corretamente o gênero textual de um parágrafo 80
 		\toprule
 		{}             & precisão & cobertura & $F_1$ & suporte \\
 		\midrule
-		filosofia      & 0.79     & 0.82      & 0.80  & 4693    \\
-		historiografia & 0.80     & 0.78      & 0.79  & 4552    \\
+		historiografia & 0.81     & 0.76      & 0.79  & 4696    \\
+		filosofia      & 0.79     & 0.84      & 0.82  & 5136    \\
 		\midrule
-		acurácia       &          &           & 0.80  & 9245    \\
-		macro avg      & 0.80     & 0.80      & 0.80  & 9245    \\
-		weighted avg   & 0.80     & 0.80      & 0.80  & 9245    \\
-		\midrule
-		\midrule
-		log loss       & 0.450    &           &       & 9245    \\
+		acurácia       &          &           & 0.80  & 9832    \\
+		macro avg      & 0.80     & 0.80      & 0.80  & 9832    \\
+		weighted avg   & 0.80     & 0.80      & 0.80  & 9832    \\
 		\bottomrule
 	\end{tabular}
 	\caption{Resumo das métricas do modelo utilizado}\label{tab:resumometrica}
@@ -217,13 +214,36 @@ Em resumo, este modelo prevê corretamente o gênero textual de um parágrafo 80
 
 \begin{figure}[!ht]
 	\begin{center}
-		\includegraphics[width=.6\linewidth]{./figs/confusao.png}
+		\includegraphics[width=.7\linewidth]{./figs/confusao.png}
 	\end{center}
 	\caption{Matriz de confusão para o modelo utilizado, métricas em~\autoref{tab:resumometrica}}\label{fig:confusao}
 \end{figure}
 
-
 \chapter{Discussão}
+
+O próximo gráfico contém os coeficientes derivados pelo modelo para cada um dos verbos que pode reger um objeto oblíquo e oração infinitiva e que estão atestados no corpus de estudo.\footnote{Os coeficientes aqui são produzidos a partir da diferença entre as probabilidades de ocorrer em um texto filosófico e de ocorrer em um texto historiográfico. A classe de modelo Naïve-Bayes utilizada aqui estima a probabilidade de pertencer tanto ao gênero $g$ quanto ao gênero $\hat{g}$ (não-$g$), sendo assim necessário produzir um valor de diferença. A prática de contraste de coeficientes é comum na análise de modelos estatísticos bayesianos, cf.~\textcite{McElreath2020}.}
+Valores positivos de coeficiente indicam que, estando esse verbo em um dado parágrafo, a probabilidade de que este parágrafo corresponda a um texto historiográfico sobe, e os valores negativos favorecem a hipótese de que o texto vem de um diálogo filosófico.
+Por fim, as barras em verde marcam os verbos que denotam modalidade, as azuis verbos que denotam ações.
+5
+Os verbos com semântica modalizadora ocupam em sua maioria a região esquerda do gráfico, onde a presença de um item favorece a atribuição do parágrafo ao gênero filosófico, como previa a hipótese inicial. Apenas três verbos dessa classe possuem peso contrário, a saber sumferw, hyparxw e porw, sendo particularmente excepcional o caso do último.\footnote{A justificativa provavelmente está na baixíssima frequência de ocorrência deste verbo no corpus grego como um todo, com exceção apenas de Homero.}
+Por outro lado, os verbos com semântica de `ordenar\slash{}aconselhar\slash{}etc.` estão concentrados na direita do gráfico, indicando a preferência por eles em textos historiográficos, embora a dispersão seja muito maior.
+
+\begin{figure}[!ht]
+	\begin{center}
+		\includegraphics[width=1.0\linewidth]{./figs/diff2.png}
+	\end{center}
+\end{figure}
+
+Uma palavra sobre as unidades pode ser importante: a escala logarítmica do eixo $y$ é utilizada em modelos porque computadores sofrem calculando probabilidades de 0 a 1 ou 0 a 100\% e ela é um tanto estranha de se interpretar. No exemplo acima, o verbo entellw tem um valor de aproximadamente $logit(2.5)$, o que equivale a algo na casa de $0.97$.
+Isso é um valor \textbf{muito} alto.
+Qualquer verbo cujo coeficiente ultrapasse a casa de $\pm logit(1.0)$ indica que a probabilidade condicional de que aquele verbo ocorra mais em um gênero textual do que outro é altíssima, ou ao menos que o modelo tem muita certeza disso e a faixa entre $logit(0.5)$ e $logit(0.75)$ não pode ser desprezada.
+Assim, esse experimento oferece evidência de que:
+\begin{compactenum}
+\item a maioria dos verbos de interesse desta pesquisa com semântica modal estão associados ao gênero do diálogo filosófico grego;
+\item alguns destes tem associação extremamente forte, servindo de ponto de contraste entre o gênero filosófico e historiográfico;
+\item a maioria dos verbos de interesse que denotam ordens, conselhos etc.\ estão associados ao gênero de prosa filosófica; e
+\item esta última classe de verbos é mais dispersa na escala do que a classe dos modalizadores.
+\end{compactenum}
 
 \printbibliography%
 
