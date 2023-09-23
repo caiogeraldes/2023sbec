@@ -34,9 +34,8 @@ $(BIBLIO):
 
 $(HDT):
 	{ \
-	cd ./dados; \
-	mkdir dioriris;\
-	cd ./diorisis; \
+	mkdir -p dados/diorisis;\
+	cd ./dados/diorisis/; \
 	wget https://figshare.com/ndownloader/files/27831960; \
 	mv 27831960 diorisis.zip; \
   unzip -jn "diorisis.zip" "Plato (0059) - Apology (002).json";\
