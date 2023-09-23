@@ -1,7 +1,6 @@
 FALA=./fala
 TARGET=$(FALA)/2023_SBEC_CaioGeraldes.pdf
 PRETARGET=$(FALA)/main.pdf
-DIORISIS=./dados/diorisis/diorisis.zip
 BIBLIO=$(FALA)/bibliografia/biblio.bib
 HDT=./dados/diorisis/Herodotus (0016) - Histories (001).json
 FIGURA=$(FALA)/figs/diff2.png
@@ -33,19 +32,13 @@ $(PRETARGET): $(FALA)/main.tex $(BIBLIO) $(FIGURA)
 $(BIBLIO):
 	git submodule update --init --remote --recursive;
 
-$(DIORISIS):
+$(HDT):
 	{ \
 	cd ./dados; \
-	mkdir diorisis; \
+	mkdir dioriris;\
 	cd ./diorisis; \
 	wget https://figshare.com/ndownloader/files/27831960; \
 	mv 27831960 diorisis.zip; \
-	}
-
-$(HDT): $(DIORISIS)
-	{ \
-	cd ./dados; \
-	cd ./diorisis; \
   unzip -jn "diorisis.zip" "Plato (0059) - Apology (002).json";\
   unzip -jn "diorisis.zip" "Plato (0059) - Charmides (018).json";\
   unzip -jn "diorisis.zip" "Plato (0059) - Cratylus (005).json";\
@@ -83,6 +76,7 @@ $(HDT): $(DIORISIS)
   unzip -jn "diorisis.zip" "Xenophon (0032) - Symposium (004).json";\
 	unzip -jn "diorisis.zip" "Herodotus (0016) - Histories (001).json";\
 	rm -f "diorisis.zip";\
+	rm -f 27831960 27831960.*;\
 	}
 
 $(FIGURA): $(HDT)
@@ -99,8 +93,7 @@ python:
 	}
 
 clean:
-	rm -f $(DIORISIS)\
-	  $(TARGET)\
+	rm -f $(TARGET)\
 	  $(FIGURA)\
 	  $(HDT)
 	
