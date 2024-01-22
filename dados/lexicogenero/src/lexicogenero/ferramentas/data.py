@@ -14,7 +14,9 @@ from typing import Any, List
 def gera_paragrafo(data: pd.DataFrame) -> pd.DataFrame:
     """docstring for gera_paragrafo"""
 
-    data[["div_sup", "par"]] = data.location.str.split(".", n=1, expand=True)
+    loc_data = data.location.str.split(".", n=1, expand=True).rename({0: "div_sup", 1: "par"}, axis=1)
+
+    data = pd.concat([data, loc_data], axis=1)
 
     data.dropna(inplace=True)
 
@@ -30,7 +32,9 @@ def gera_paragrafo(data: pd.DataFrame) -> pd.DataFrame:
 def gera_sent(data: pd.DataFrame) -> pd.DataFrame:
     """docstring for gera_sent"""
 
-    data[["div_sup", "par"]] = data.location.str.split(".", n=1, expand=True)
+    loc_data = data.location.str.split(".", n=1, expand=True).rename({0: "div_sup", 1: "par"}, axis=1)
+
+    data = pd.concat([data, loc_data], axis=1)
 
     data.dropna(inplace=True)
     j: Any = data.groupby(["author", "text", "file", "sent_id", "genero"]).agg(
